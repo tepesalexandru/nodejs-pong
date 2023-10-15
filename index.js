@@ -5,7 +5,7 @@ const gridHeight = 20;
 const gridWidth = 60;
 
 // Function to generate a matrix of size gridHeight x gridWidth, holding the grid
-const generateGrid = () => {
+const generateEmptyGrid = () => {
   let grid = [];
   for (let i = 0; i < gridHeight; i++) {
     grid.push([]);
@@ -63,7 +63,7 @@ const gameLoop = () => {
   setTimeout(gameLoop, 35);
 };
 
-let grid = generateGrid();
+let grid = generateEmptyGrid();
 let currentBallPosition = {
   x: 1,
   y: 1,

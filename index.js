@@ -1,8 +1,8 @@
-// Create a 10 x 10 grid
+// Global Variables
 const gridHeight = 20;
 const gridWidth = 60;
 
-// Variable to hold the grid
+// Function to generate a matrix of size gridHeight x gridWidth, holding the grid
 const generateGrid = () => {
   let grid = [];
   for (let i = 0; i < gridHeight; i++) {
@@ -40,7 +40,6 @@ const movePlayer = (grid) => {
   playerPosition.x = newPosition.x;
   playerPosition.y = newPosition.y;
   // Add the player to the grid
-  // grid = grid.substr(0, playerPosition.y) + "O" + grid.substr(playerPosition.y);
   grid[gridWidth * playerPosition.x + playerPosition.y] = "O";
   printGrid(grid);
 };

@@ -31,7 +31,7 @@ const printGrid = (grid) => {
   }
 };
 
-const movePlayer = (grid, moveVector) => {
+const moveBall = (grid, moveVector) => {
   const newPosition = {
     x: playerPosition.x + moveVector.x,
     y: playerPosition.y + moveVector.y,
@@ -61,7 +61,7 @@ const playerPosition = {
 };
 
 const gameLoop = () => {
-  movePlayer(grid, moveVector);
+  moveBall(grid, moveVector);
   printGrid(grid);
   setTimeout(gameLoop, 35);
 };

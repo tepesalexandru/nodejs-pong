@@ -2,8 +2,19 @@
 const gridHeight = 20;
 const gridWidth = 60;
 
-console.log("#".repeat(gridWidth));
-for (let i = 0; i < gridHeight - 2; i++) {
-  console.log("#" + " ".repeat(gridWidth - 2) + "#");
-}
-console.log("#".repeat(gridWidth));
+// Variable to hold the grid
+const generateGrid = () => {
+  let grid = "";
+  grid += "#".repeat(gridWidth) + "\n";
+  for (let i = 0; i < gridHeight - 2; i++) {
+    grid += "#" + " ".repeat(gridWidth - 2) + "#" + "\n";
+  }
+  grid += "#".repeat(gridWidth) + "\n";
+  return grid;
+};
+
+printGrid = () => {
+  console.log(generateGrid());
+};
+
+printGrid();

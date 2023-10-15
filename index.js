@@ -1,5 +1,3 @@
-console.log("This is Pong!");
-
 // Create a 10 x 10 grid
 const gridHeight = 20;
 const gridWidth = 60;

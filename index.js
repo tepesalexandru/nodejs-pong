@@ -1,3 +1,5 @@
+"use strict";
+
 // Global Variables
 const gridHeight = 20;
 const gridWidth = 60;
@@ -22,7 +24,7 @@ const generateGrid = () => {
   return grid;
 };
 
-printGrid = (grid) => {
+const printGrid = (grid) => {
   console.clear();
   for (let i = 0; i < gridHeight; i++) {
     console.log(grid[i].join(""));

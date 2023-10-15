@@ -52,13 +52,22 @@ const getNextBallPosition = (currentPosition, moveVector) => {
     moveVector.y = -moveVector.y;
     newPosition.y = currentPosition.y + moveVector.y;
   }
+  // Check collision with player
+  if (
+    newPosition.x >= currentPlayerPosition.fromY &&
+    newPosition.x <= currentPlayerPosition.toY &&
+    newPosition.y === 6
+  ) {
+    moveVector.y = -moveVector.y;
+    newPosition.y = currentPosition.y + moveVector.y;
+  }
   return newPosition;
 };
 
 const getNextPlayerPosition = (currentPlayerPosition, moveVector) => {
   const newPosition = {
-    fromY: currentPlayerPosition.fromY + moveVector,
-    toY: currentPlayerPosition.toY + moveVector,
+    fromY: currentPlayerPosition.fromY + moveVector.y,
+    toY: currentPlayerPosition.toY + moveVector.y,
   };
   // Check outer bounds
   if (newPosition.fromY < 1 || newPosition.toY >= gridHeight - 1) {
@@ -85,7 +94,10 @@ const updatePlayerGridPosition = (
 
 const gameLoop = () => {
   let newBallPosition = getNextBallPosition(currentBallPosition, moveVector);
-  let newPlayerPosition = getNextPlayerPosition(currentPlayerPosition, 1);
+  let newPlayerPosition = getNextPlayerPosition(
+    currentPlayerPosition,
+    movePlayerVector
+  );
   updatePlayerGridPosition(grid, currentPlayerPosition, newPlayerPosition);
   updateBallGridPosition(grid, currentBallPosition, newBallPosition);
   currentBallPosition = newBallPosition;
@@ -104,4 +116,39 @@ let currentPlayerPosition = {
   toY: 4,
 };
 let moveVector = { x: 1, y: 1 };
+let movePlayerVector = {
+  y: 0,
+};
 gameLoop();
+
+var stdin = process.stdin;
+
+// without this, we would only get streams once enter is pressed
+stdin.setRawMode(true);
+
+// resume stdin in the parent process (node app won't quit all by itself
+// unless an error or process.exit() happens)
+stdin.resume();
+
+// i don't want binary, do you?
+stdin.setEncoding("utf8");
+
+// on any data into stdin
+stdin.on("data", function (key) {
+  // ctrl-c ( end of text )
+  if (key === "\u0003") {
+    process.exit();
+  }
+
+  const UP_ARROW = "\u001B\u005B\u0041";
+  const DOWN_ARROW = "\u001B\u005B\u0042";
+
+  // Check if the user pressed the up arrow key
+  if (key === UP_ARROW) {
+    movePlayerVector.y = -1;
+  }
+  // Check if the user pressed the down arrow key
+  else if (key === DOWN_ARROW) {
+    movePlayerVector.y = 1;
+  }
+});

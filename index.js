@@ -55,18 +55,53 @@ const getNextBallPosition = (currentPosition, moveVector) => {
   return newPosition;
 };
 
+const getNextPlayerPosition = (currentPlayerPosition, moveVector) => {
+  const newPosition = {
+    fromY: currentPlayerPosition.fromY + moveVector,
+    toY: currentPlayerPosition.toY + moveVector,
+  };
+  // Check outer bounds
+  if (newPosition.fromY < 1 || newPosition.toY >= gridHeight - 1) {
+    newPosition.fromY = currentPlayerPosition.fromY;
+    newPosition.toY = currentPlayerPosition.toY;
+  }
+  return newPosition;
+};
+
+const updatePlayerGridPosition = (
+  grid,
+  oldPlayerPosition,
+  newPlayerPosition
+) => {
+  // Remove the player from the grid
+  for (let i = oldPlayerPosition.fromY; i <= oldPlayerPosition.toY; i++) {
+    grid[i][6] = " ";
+  }
+  // Add the player to the grid
+  for (let i = newPlayerPosition.fromY; i <= newPlayerPosition.toY; i++) {
+    grid[i][6] = "X";
+  }
+};
+
 const gameLoop = () => {
   let newBallPosition = getNextBallPosition(currentBallPosition, moveVector);
+  let newPlayerPosition = getNextPlayerPosition(currentPlayerPosition, 1);
+  updatePlayerGridPosition(grid, currentPlayerPosition, newPlayerPosition);
   updateBallGridPosition(grid, currentBallPosition, newBallPosition);
   currentBallPosition = newBallPosition;
+  currentPlayerPosition = newPlayerPosition;
   printGrid(grid);
   setTimeout(gameLoop, 35);
 };
 
 let grid = generateEmptyGrid();
 let currentBallPosition = {
-  x: 1,
-  y: 1,
+  x: 10,
+  y: 10,
+};
+let currentPlayerPosition = {
+  fromY: 1,
+  toY: 4,
 };
 let moveVector = { x: 1, y: 1 };
 gameLoop();

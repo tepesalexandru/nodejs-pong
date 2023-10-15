@@ -23,25 +23,34 @@ const generateGrid = () => {
 };
 
 printGrid = (grid) => {
+  console.clear();
   for (let i = 0; i < gridHeight; i++) {
     console.log(grid[i].join(""));
   }
 };
 
-const movePlayer = (grid) => {
+const movePlayer = (grid, moveVector) => {
   const newPosition = {
-    x: playerPosition.x + 1,
-    y: playerPosition.y,
+    x: playerPosition.x + moveVector.x,
+    y: playerPosition.y + moveVector.y,
   };
-  console.log(newPosition);
+  // Check outer bounds
+  if (newPosition.x < 1 || newPosition.x >= gridHeight - 1) {
+    moveVector.x = -moveVector.x;
+    newPosition.x = playerPosition.x + moveVector.x;
+  }
+  if (newPosition.y < 1 || newPosition.y >= gridWidth - 1) {
+    moveVector.y = -moveVector.y;
+    newPosition.y = playerPosition.y + moveVector.y;
+  }
+
   // Remove the player from the grid
-  grid = grid.replace("O", " ");
+  grid[playerPosition.x][playerPosition.y] = " ";
   // Update the player position
   playerPosition.x = newPosition.x;
   playerPosition.y = newPosition.y;
   // Add the player to the grid
-  grid[gridWidth * playerPosition.x + playerPosition.y] = "O";
-  printGrid(grid);
+  grid[playerPosition.x][playerPosition.y] = "O";
 };
 
 const playerPosition = {
@@ -49,12 +58,12 @@ const playerPosition = {
   y: 1,
 };
 
-// const gameLoop = () => {
-//   let grid = generateGrid();
-//   printGrid(grid);
-//   movePlayer(grid);
-//   setTimeout(gameLoop, 1000);
-// };
+const gameLoop = () => {
+  movePlayer(grid, moveVector);
+  printGrid(grid);
+  setTimeout(gameLoop, 35);
+};
 
-// gameLoop();
-printGrid(generateGrid());
+let grid = generateGrid();
+let moveVector = { x: 1, y: 1 };
+gameLoop();

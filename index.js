@@ -21,23 +21,6 @@ const generateGameOverText = () => {
   return gameOverText;
 };
 
-const generatePlaceholderText = () => {
-  const gameOverText = `
-                                      
-                                      
-                                      
-                                      
-                                      
-                                      
-                                      
-                                      
-                                      
-                                      
-                                      
-  `;
-  return gameOverText;
-};
-
 // Function to generate a matrix of size gridHeight x gridWidth, holding the grid
 const generateEmptyGrid = () => {
   let grid = [];
@@ -152,6 +135,8 @@ const gameLoop = () => {
   if (isGameOver) {
     console.clear();
     console.log(generateGameOverText());
+    console.log("Press R to restart the game");
+    setTimeout(gameLoop, 35);
     return;
   }
   let newLeftPlayerPosition = getNextPlayerPosition(
@@ -166,6 +151,12 @@ const gameLoop = () => {
     currentBallPosition,
     ballMoveVector
   );
+  if (
+    score.left === POINTS_NEEDED_TO_WIN ||
+    score.right === POINTS_NEEDED_TO_WIN
+  ) {
+    isGameOver = true;
+  }
   updatePlayerGridPosition(
     grid,
     currentLeftPlayerPosition,
@@ -212,7 +203,8 @@ let score = {
   left: 0,
   right: 0,
 };
-const isGameOver = true;
+let isGameOver = false;
+const POINTS_NEEDED_TO_WIN = 1;
 gameLoop();
 
 var stdin = process.stdin;
@@ -239,6 +231,7 @@ stdin.on("data", function (key) {
 
   const W_KEY = "\u0077";
   const S_KEY = "\u0073";
+  const R_KEY = "\u0072";
 
   // Check if the user pressed the up arrow key
   if (key === UP_ARROW) {
@@ -253,5 +246,24 @@ stdin.on("data", function (key) {
     rightPlayerMoveVector.y = -1;
   } else if (key === S_KEY) {
     rightPlayerMoveVector.y = 1;
+  }
+
+  if (key == R_KEY && isGameOver) {
+    isGameOver = false;
+    score.left = 0;
+    score.right = 0;
+
+    // Reset player positions
+    currentLeftPlayerPosition = {
+      fromY: 1,
+      toY: 4,
+      column: 6,
+    };
+
+    currentRightPlayerPosition = {
+      fromY: 1,
+      toY: 4,
+      column: gridWidth - 7,
+    };
   }
 });

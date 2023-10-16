@@ -50,30 +50,30 @@ const checkCollisionWithPlayer = (ballPosition, playerPosition) => {
 };
 
 const getNextBallPosition = (currentPosition, moveVector) => {
-  const newPosition = {
+  const newBallPosition = {
     x: currentPosition.x + moveVector.x,
     y: currentPosition.y + moveVector.y,
   };
   // Check outer bounds
-  if (newPosition.x < 1 || newPosition.x >= gridHeight - 1) {
+  if (newBallPosition.x < 1 || newBallPosition.x >= gridHeight - 1) {
     moveVector.x = -moveVector.x;
-    newPosition.x = currentPosition.x + moveVector.x;
+    newBallPosition.x = currentPosition.x + moveVector.x;
   }
-  if (newPosition.y < 1 || newPosition.y >= gridWidth - 1) {
+  if (newBallPosition.y < 1 || newBallPosition.y >= gridWidth - 1) {
     moveVector.y = -moveVector.y;
-    newPosition.y = currentPosition.y + moveVector.y;
+    newBallPosition.y = currentPosition.y + moveVector.y;
   }
   // Check collision with left player
-  if (checkCollisionWithPlayer(newPosition, currentLeftPlayerPosition)) {
+  if (checkCollisionWithPlayer(newBallPosition, currentLeftPlayerPosition)) {
     moveVector.y = -moveVector.y;
-    newPosition.y = currentPosition.y + moveVector.y;
+    newBallPosition.y = currentPosition.y + moveVector.y;
   }
   // Check collision with right player
-  if (checkCollisionWithPlayer(newPosition, currentRightPlayerPosition)) {
+  if (checkCollisionWithPlayer(newBallPosition, currentRightPlayerPosition)) {
     moveVector.y = -moveVector.y;
-    newPosition.y = currentPosition.y + moveVector.y;
+    newBallPosition.y = currentPosition.y + moveVector.y;
   }
-  return newPosition;
+  return newBallPosition;
 };
 
 const getNextPlayerPosition = (currentPlayerPosition, moveVector) => {

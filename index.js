@@ -77,6 +77,7 @@ const getNextLeftPlayerPosition = (currentPlayerPosition, moveVector) => {
   const newPosition = {
     fromY: currentPlayerPosition.fromY + moveVector.y,
     toY: currentPlayerPosition.toY + moveVector.y,
+    column: currentPlayerPosition.column,
   };
   // Check outer bounds
   if (newPosition.fromY < 1 || newPosition.toY >= gridHeight - 1) {
@@ -86,18 +87,18 @@ const getNextLeftPlayerPosition = (currentPlayerPosition, moveVector) => {
   return newPosition;
 };
 
-const updateLeftPlayerGridPosition = (
+const updatePlayerGridPosition = (
   grid,
   oldPlayerPosition,
   newPlayerPosition
 ) => {
   // Remove the player from the grid
   for (let i = oldPlayerPosition.fromY; i <= oldPlayerPosition.toY; i++) {
-    grid[i][6] = " ";
+    grid[i][oldPlayerPosition.column] = " ";
   }
   // Add the player to the grid
   for (let i = newPlayerPosition.fromY; i <= newPlayerPosition.toY; i++) {
-    grid[i][6] = "X";
+    grid[i][oldPlayerPosition.column] = "X";
   }
 };
 
@@ -105,6 +106,7 @@ const getNextRightPlayerPosition = (currentPlayerPosition, moveVector) => {
   const newPosition = {
     fromY: currentPlayerPosition.fromY + moveVector.y,
     toY: currentPlayerPosition.toY + moveVector.y,
+    column: currentPlayerPosition.column,
   };
   // Check outer bounds
   if (newPosition.fromY < 1 || newPosition.toY >= gridHeight - 1) {
@@ -112,21 +114,6 @@ const getNextRightPlayerPosition = (currentPlayerPosition, moveVector) => {
     newPosition.toY = currentPlayerPosition.toY;
   }
   return newPosition;
-};
-
-const updateRightPlayerGridPosition = (
-  grid,
-  oldPlayerPosition,
-  newPlayerPosition
-) => {
-  // Remove the player from the grid
-  for (let i = oldPlayerPosition.fromY; i <= oldPlayerPosition.toY; i++) {
-    grid[i][gridWidth - 7] = " ";
-  }
-  // Add the player to the grid
-  for (let i = newPlayerPosition.fromY; i <= newPlayerPosition.toY; i++) {
-    grid[i][gridWidth - 7] = "X";
-  }
 };
 
 const gameLoop = () => {
@@ -139,12 +126,12 @@ const gameLoop = () => {
     currentRightPlayerPosition,
     moveRightPlayerVector
   );
-  updateLeftPlayerGridPosition(
+  updatePlayerGridPosition(
     grid,
     currentLeftPlayerPosition,
     newLeftPlayerPosition
   );
-  updateRightPlayerGridPosition(
+  updatePlayerGridPosition(
     grid,
     currentRightPlayerPosition,
     newRightPlayerPosition
@@ -165,10 +152,12 @@ let currentBallPosition = {
 let currentLeftPlayerPosition = {
   fromY: 1,
   toY: 4,
+  column: 6,
 };
 let currentRightPlayerPosition = {
   fromY: 1,
   toY: 4,
+  column: gridWidth - 7,
 };
 
 let moveVector = { x: 1, y: 1 };

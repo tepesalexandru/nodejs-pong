@@ -130,6 +130,7 @@ const gameLoop = () => {
   currentLeftPlayerPosition = newLeftPlayerPosition;
   currentRightPlayerPosition = newRightPlayerPosition;
   printGrid(grid);
+  console.log("Score: ", score);
   setTimeout(gameLoop, 35);
 };
 
@@ -155,6 +156,10 @@ let moveLeftPlayerVector = {
 };
 let moveRightPlayerVector = {
   y: 0,
+};
+let score = {
+  left: 0,
+  right: 0,
 };
 gameLoop();
 

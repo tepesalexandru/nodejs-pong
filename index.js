@@ -52,11 +52,20 @@ const getNextBallPosition = (currentPosition, moveVector) => {
     moveVector.y = -moveVector.y;
     newPosition.y = currentPosition.y + moveVector.y;
   }
-  // Check collision with player
+  // Check collision with left player
   if (
-    newPosition.x >= currentPlayerPosition.fromY &&
-    newPosition.x <= currentPlayerPosition.toY &&
+    newPosition.x >= currentLeftPlayerPosition.fromY &&
+    newPosition.x <= currentLeftPlayerPosition.toY &&
     newPosition.y === 6
+  ) {
+    moveVector.y = -moveVector.y;
+    newPosition.y = currentPosition.y + moveVector.y;
+  }
+  // Check collision with right player
+  if (
+    newPosition.x >= currentRightPlayerPosition.fromY &&
+    newPosition.x <= currentRightPlayerPosition.toY &&
+    newPosition.y === gridWidth - 7
   ) {
     moveVector.y = -moveVector.y;
     newPosition.y = currentPosition.y + moveVector.y;
@@ -64,7 +73,7 @@ const getNextBallPosition = (currentPosition, moveVector) => {
   return newPosition;
 };
 
-const getNextPlayerPosition = (currentPlayerPosition, moveVector) => {
+const getNextLeftPlayerPosition = (currentPlayerPosition, moveVector) => {
   const newPosition = {
     fromY: currentPlayerPosition.fromY + moveVector.y,
     toY: currentPlayerPosition.toY + moveVector.y,
@@ -77,7 +86,7 @@ const getNextPlayerPosition = (currentPlayerPosition, moveVector) => {
   return newPosition;
 };
 
-const updatePlayerGridPosition = (
+const updateLeftPlayerGridPosition = (
   grid,
   oldPlayerPosition,
   newPlayerPosition
@@ -92,16 +101,58 @@ const updatePlayerGridPosition = (
   }
 };
 
+const getNextRightPlayerPosition = (currentPlayerPosition, moveVector) => {
+  const newPosition = {
+    fromY: currentPlayerPosition.fromY + moveVector.y,
+    toY: currentPlayerPosition.toY + moveVector.y,
+  };
+  // Check outer bounds
+  if (newPosition.fromY < 1 || newPosition.toY >= gridHeight - 1) {
+    newPosition.fromY = currentPlayerPosition.fromY;
+    newPosition.toY = currentPlayerPosition.toY;
+  }
+  return newPosition;
+};
+
+const updateRightPlayerGridPosition = (
+  grid,
+  oldPlayerPosition,
+  newPlayerPosition
+) => {
+  // Remove the player from the grid
+  for (let i = oldPlayerPosition.fromY; i <= oldPlayerPosition.toY; i++) {
+    grid[i][gridWidth - 7] = " ";
+  }
+  // Add the player to the grid
+  for (let i = newPlayerPosition.fromY; i <= newPlayerPosition.toY; i++) {
+    grid[i][gridWidth - 7] = "X";
+  }
+};
+
 const gameLoop = () => {
   let newBallPosition = getNextBallPosition(currentBallPosition, moveVector);
-  let newPlayerPosition = getNextPlayerPosition(
-    currentPlayerPosition,
-    movePlayerVector
+  let newLeftPlayerPosition = getNextLeftPlayerPosition(
+    currentLeftPlayerPosition,
+    moveLeftPlayerVector
   );
-  updatePlayerGridPosition(grid, currentPlayerPosition, newPlayerPosition);
+  let newRightPlayerPosition = getNextRightPlayerPosition(
+    currentRightPlayerPosition,
+    moveRightPlayerVector
+  );
+  updateLeftPlayerGridPosition(
+    grid,
+    currentLeftPlayerPosition,
+    newLeftPlayerPosition
+  );
+  updateRightPlayerGridPosition(
+    grid,
+    currentRightPlayerPosition,
+    newRightPlayerPosition
+  );
   updateBallGridPosition(grid, currentBallPosition, newBallPosition);
   currentBallPosition = newBallPosition;
-  currentPlayerPosition = newPlayerPosition;
+  currentLeftPlayerPosition = newLeftPlayerPosition;
+  currentRightPlayerPosition = newRightPlayerPosition;
   printGrid(grid);
   setTimeout(gameLoop, 35);
 };
@@ -111,12 +162,20 @@ let currentBallPosition = {
   x: 10,
   y: 10,
 };
-let currentPlayerPosition = {
+let currentLeftPlayerPosition = {
   fromY: 1,
   toY: 4,
 };
+let currentRightPlayerPosition = {
+  fromY: 1,
+  toY: 4,
+};
+
 let moveVector = { x: 1, y: 1 };
-let movePlayerVector = {
+let moveLeftPlayerVector = {
+  y: 0,
+};
+let moveRightPlayerVector = {
   y: 0,
 };
 gameLoop();
@@ -143,12 +202,21 @@ stdin.on("data", function (key) {
   const UP_ARROW = "\u001B\u005B\u0041";
   const DOWN_ARROW = "\u001B\u005B\u0042";
 
+  const W_KEY = "\u0077";
+  const S_KEY = "\u0073";
+
   // Check if the user pressed the up arrow key
   if (key === UP_ARROW) {
-    movePlayerVector.y = -1;
+    moveLeftPlayerVector.y = -1;
   }
   // Check if the user pressed the down arrow key
   else if (key === DOWN_ARROW) {
-    movePlayerVector.y = 1;
+    moveLeftPlayerVector.y = 1;
+  }
+
+  if (key === W_KEY) {
+    moveRightPlayerVector.y = -1;
+  } else if (key === S_KEY) {
+    moveRightPlayerVector.y = 1;
   }
 });

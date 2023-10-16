@@ -204,7 +204,7 @@ let score = {
   right: 0,
 };
 let isGameOver = false;
-const POINTS_NEEDED_TO_WIN = 1;
+const POINTS_NEEDED_TO_WIN = 3;
 gameLoop();
 
 var stdin = process.stdin;

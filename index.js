@@ -59,9 +59,18 @@ const getNextBallPosition = (currentPosition, moveVector) => {
     moveVector.x = -moveVector.x;
     newBallPosition.x = currentPosition.x + moveVector.x;
   }
-  if (newBallPosition.y < 1 || newBallPosition.y >= gridWidth - 1) {
-    moveVector.y = -moveVector.y;
-    newBallPosition.y = currentPosition.y + moveVector.y;
+  if (newBallPosition.y < 1) {
+    score.right++;
+    newBallPosition.y = gridWidth / 2;
+    newBallPosition.x = gridHeight / 2;
+    ballMoveVector.x = -ballMoveVector.x;
+    ballMoveVector.y = -ballMoveVector.y;
+  } else if (newBallPosition.y >= gridWidth - 1) {
+    score.left++;
+    newBallPosition.y = gridWidth / 2;
+    newBallPosition.x = gridHeight / 2;
+    ballMoveVector.x = -ballMoveVector.x;
+    ballMoveVector.y = -ballMoveVector.y;
   }
   // Check collision with left player
   if (checkCollisionWithPlayer(newBallPosition, currentLeftPlayerPosition)) {
@@ -108,13 +117,16 @@ const updatePlayerGridPosition = (
 const gameLoop = () => {
   let newLeftPlayerPosition = getNextPlayerPosition(
     currentLeftPlayerPosition,
-    moveLeftPlayerVector
+    leftPlayerMoveVector
   );
   let newRightPlayerPosition = getNextPlayerPosition(
     currentRightPlayerPosition,
-    moveRightPlayerVector
+    rightPlayerMoveVector
   );
-  let newBallPosition = getNextBallPosition(currentBallPosition, moveVector);
+  let newBallPosition = getNextBallPosition(
+    currentBallPosition,
+    ballMoveVector
+  );
   updatePlayerGridPosition(
     grid,
     currentLeftPlayerPosition,
@@ -150,11 +162,11 @@ let currentRightPlayerPosition = {
   column: gridWidth - 7,
 };
 
-let moveVector = { x: 1, y: 1 };
-let moveLeftPlayerVector = {
+let ballMoveVector = { x: 1, y: 1 };
+let leftPlayerMoveVector = {
   y: 0,
 };
-let moveRightPlayerVector = {
+let rightPlayerMoveVector = {
   y: 0,
 };
 let score = {
@@ -190,16 +202,16 @@ stdin.on("data", function (key) {
 
   // Check if the user pressed the up arrow key
   if (key === UP_ARROW) {
-    moveLeftPlayerVector.y = -1;
+    leftPlayerMoveVector.y = -1;
   }
   // Check if the user pressed the down arrow key
   else if (key === DOWN_ARROW) {
-    moveLeftPlayerVector.y = 1;
+    leftPlayerMoveVector.y = 1;
   }
 
   if (key === W_KEY) {
-    moveRightPlayerVector.y = -1;
+    rightPlayerMoveVector.y = -1;
   } else if (key === S_KEY) {
-    moveRightPlayerVector.y = 1;
+    rightPlayerMoveVector.y = 1;
   }
 });

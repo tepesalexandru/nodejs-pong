@@ -38,6 +38,17 @@ const updateBallGridPosition = (grid, oldBallPosition, newBallPosition) => {
   grid[newBallPosition.x][newBallPosition.y] = "O";
 };
 
+const checkCollisionWithPlayer = (ballPosition, playerPosition) => {
+  if (
+    ballPosition.x >= playerPosition.fromY &&
+    ballPosition.x <= playerPosition.toY &&
+    ballPosition.y === playerPosition.column
+  ) {
+    return true;
+  }
+  return false;
+};
+
 const getNextBallPosition = (currentPosition, moveVector) => {
   const newPosition = {
     x: currentPosition.x + moveVector.x,
@@ -53,20 +64,12 @@ const getNextBallPosition = (currentPosition, moveVector) => {
     newPosition.y = currentPosition.y + moveVector.y;
   }
   // Check collision with left player
-  if (
-    newPosition.x >= currentLeftPlayerPosition.fromY &&
-    newPosition.x <= currentLeftPlayerPosition.toY &&
-    newPosition.y === 6
-  ) {
+  if (checkCollisionWithPlayer(newPosition, currentLeftPlayerPosition)) {
     moveVector.y = -moveVector.y;
     newPosition.y = currentPosition.y + moveVector.y;
   }
   // Check collision with right player
-  if (
-    newPosition.x >= currentRightPlayerPosition.fromY &&
-    newPosition.x <= currentRightPlayerPosition.toY &&
-    newPosition.y === gridWidth - 7
-  ) {
+  if (checkCollisionWithPlayer(newPosition, currentRightPlayerPosition)) {
     moveVector.y = -moveVector.y;
     newPosition.y = currentPosition.y + moveVector.y;
   }
@@ -103,7 +106,6 @@ const updatePlayerGridPosition = (
 };
 
 const gameLoop = () => {
-  let newBallPosition = getNextBallPosition(currentBallPosition, moveVector);
   let newLeftPlayerPosition = getNextPlayerPosition(
     currentLeftPlayerPosition,
     moveLeftPlayerVector
@@ -112,6 +114,7 @@ const gameLoop = () => {
     currentRightPlayerPosition,
     moveRightPlayerVector
   );
+  let newBallPosition = getNextBallPosition(currentBallPosition, moveVector);
   updatePlayerGridPosition(
     grid,
     currentLeftPlayerPosition,

@@ -4,6 +4,40 @@
 const gridHeight = 20;
 const gridWidth = 60;
 
+const generateGameOverText = () => {
+  const gameOverText = `
+  ███▀▀▀██┼███▀▀▀███┼███▀█▄█▀███┼██▀▀▀
+  ██┼┼┼┼██┼██┼┼┼┼┼██┼██┼┼┼█┼┼┼██┼██┼┼┼
+  ██┼┼┼▄▄▄┼██▄▄▄▄▄██┼██┼┼┼▀┼┼┼██┼██▀▀▀
+  ██┼┼┼┼██┼██┼┼┼┼┼██┼██┼┼┼┼┼┼┼██┼██┼┼┼
+  ███▄▄▄██┼██┼┼┼┼┼██┼██┼┼┼┼┼┼┼██┼██▄▄▄
+  ┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼┼
+  ███▀▀▀███┼▀███┼┼██▀┼██▀▀▀┼██▀▀▀▀██▄┼
+  ██┼┼┼┼┼██┼┼┼██┼┼██┼┼██┼┼┼┼██┼┼┼┼┼██┼
+  ██┼┼┼┼┼██┼┼┼██┼┼██┼┼██▀▀▀┼██▄▄▄▄▄▀▀┼
+  ██┼┼┼┼┼██┼┼┼██┼┼█▀┼┼██┼┼┼┼██┼┼┼┼┼██┼
+  ███▄▄▄███┼┼┼─▀█▀┼┼─┼██▄▄▄┼██┼┼┼┼┼██▄
+  `;
+  return gameOverText;
+};
+
+const generatePlaceholderText = () => {
+  const gameOverText = `
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+  `;
+  return gameOverText;
+};
+
 // Function to generate a matrix of size gridHeight x gridWidth, holding the grid
 const generateEmptyGrid = () => {
   let grid = [];
@@ -115,6 +149,11 @@ const updatePlayerGridPosition = (
 };
 
 const gameLoop = () => {
+  if (isGameOver) {
+    console.clear();
+    console.log(generateGameOverText());
+    return;
+  }
   let newLeftPlayerPosition = getNextPlayerPosition(
     currentLeftPlayerPosition,
     leftPlayerMoveVector
@@ -173,6 +212,7 @@ let score = {
   left: 0,
   right: 0,
 };
+const isGameOver = true;
 gameLoop();
 
 var stdin = process.stdin;

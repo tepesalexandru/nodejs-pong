@@ -265,5 +265,7 @@ stdin.on("data", function (key) {
       toY: 4,
       column: gridWidth - 7,
     };
+
+    grid = generateEmptyGrid();
   }
 });

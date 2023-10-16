@@ -73,7 +73,7 @@ const getNextBallPosition = (currentPosition, moveVector) => {
   return newPosition;
 };
 
-const getNextLeftPlayerPosition = (currentPlayerPosition, moveVector) => {
+const getNextPlayerPosition = (currentPlayerPosition, moveVector) => {
   const newPosition = {
     fromY: currentPlayerPosition.fromY + moveVector.y,
     toY: currentPlayerPosition.toY + moveVector.y,
@@ -102,27 +102,13 @@ const updatePlayerGridPosition = (
   }
 };
 
-const getNextRightPlayerPosition = (currentPlayerPosition, moveVector) => {
-  const newPosition = {
-    fromY: currentPlayerPosition.fromY + moveVector.y,
-    toY: currentPlayerPosition.toY + moveVector.y,
-    column: currentPlayerPosition.column,
-  };
-  // Check outer bounds
-  if (newPosition.fromY < 1 || newPosition.toY >= gridHeight - 1) {
-    newPosition.fromY = currentPlayerPosition.fromY;
-    newPosition.toY = currentPlayerPosition.toY;
-  }
-  return newPosition;
-};
-
 const gameLoop = () => {
   let newBallPosition = getNextBallPosition(currentBallPosition, moveVector);
-  let newLeftPlayerPosition = getNextLeftPlayerPosition(
+  let newLeftPlayerPosition = getNextPlayerPosition(
     currentLeftPlayerPosition,
     moveLeftPlayerVector
   );
-  let newRightPlayerPosition = getNextRightPlayerPosition(
+  let newRightPlayerPosition = getNextPlayerPosition(
     currentRightPlayerPosition,
     moveRightPlayerVector
   );

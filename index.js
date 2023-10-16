@@ -204,7 +204,7 @@ let score = {
   right: 0,
 };
 let isGameOver = false;
-const POINTS_NEEDED_TO_WIN = 3;
+const POINTS_NEEDED_TO_WIN = 1;
 gameLoop();
 
 var stdin = process.stdin;
@@ -267,5 +267,11 @@ stdin.on("data", function (key) {
     };
 
     grid = generateEmptyGrid();
+    leftPlayerMoveVector = {
+      y: 0,
+    };
+    rightPlayerMoveVector = {
+      y: 0,
+    };
   }
 });

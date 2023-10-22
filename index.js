@@ -23,22 +23,13 @@ const generateGameOverText = () => {
 
 // Function to generate a matrix of size gridHeight x gridWidth, holding the grid
 const generateEmptyGrid = () => {
-  let grid = [];
-  for (let i = 0; i < gridHeight; i++) {
-    grid.push([]);
-    if (i === 0 || i === gridHeight - 1) {
-      for (let j = 0; j < gridWidth; j++) {
-        grid[i].push("#");
-      }
-    } else {
-      grid[i].push("#");
-      for (let j = 0; j < gridWidth - 2; j++) {
-        grid[i].push(" ");
-      }
-      grid[i].push("#");
-    }
-  }
-  return grid;
+  const row = Array(gridWidth - 2)
+    .fill(" ")
+    .join("");
+  const topBottomRow = Array(gridWidth).fill("#").join("");
+  const middleRows = Array(gridHeight - 2).fill(`#${row}#`);
+  const grid = [topBottomRow, ...middleRows, topBottomRow];
+  return grid.map((row) => row.split(""));
 };
 
 const printGrid = (grid) => {
